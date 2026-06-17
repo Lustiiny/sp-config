@@ -78,21 +78,37 @@ function renderSiteCopy(site) {
   });
 }
 
+function updateNavActiveState() {
+  $all("#site-nav .nav-chip").forEach((chip) => {
+    chip.classList.toggle("is-active", chip.dataset.section === state.activeSection);
+  });
+}
+
 function renderNavigation() {
   const nav = $("#site-nav");
   nav.innerHTML = "";
 
-  visibleSections().forEach((section) => {
+  visibleSections().forEach((section, index) => {
     const anchor = document.createElement("a");
     anchor.href = "#works";
-    anchor.textContent = section.title;
+    anchor.className = "nav-chip";
+    anchor.dataset.section = section.id;
+    anchor.style.setProperty("--chip-accent", section.accent || "var(--accent)");
+    anchor.innerHTML = `
+      <span class="nav-chip-code">${String(index + 1).padStart(2, "0")}</span>
+      <span class="nav-chip-text">${section.title}</span>
+      <span class="nav-chip-glow" aria-hidden="true"></span>
+    `;
     anchor.addEventListener("click", () => {
       state.activeSection = section.id;
       renderTabs();
       renderWorks();
+      updateNavActiveState();
     });
     nav.append(anchor);
   });
+
+  updateNavActiveState();
 }
 
 function renderTabs() {
@@ -107,6 +123,7 @@ function renderTabs() {
     state.activeSection = "all";
     renderTabs();
     renderWorks();
+    updateNavActiveState();
   });
   tabs.append(allButton);
 
@@ -120,6 +137,7 @@ function renderTabs() {
       state.activeSection = section.id;
       renderTabs();
       renderWorks();
+      updateNavActiveState();
     });
     tabs.append(button);
   });
