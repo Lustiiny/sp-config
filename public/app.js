@@ -287,6 +287,55 @@ function renderMedia(work, target) {
   target.append(placeholder);
 }
 
+function applyRevealStagger(container, selector) {
+  if (!container) {
+    return;
+  }
+
+  $all(selector, container).forEach((item, index) => {
+    item.classList.add("reveal-item");
+    item.style.setProperty("--reveal-delay", `${Math.min(index * 90, 540)}ms`);
+  });
+}
+
+function setupSectionReveals() {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const revealTargets = $all("[data-reveal]");
+
+  if (reducedMotion) {
+    revealTargets.forEach((section) => section.classList.add("is-visible"));
+    return;
+  }
+
+  const hero = $('[data-reveal="hero"]');
+  if (hero) {
+    window.requestAnimationFrame(() => {
+      hero.classList.add("is-visible");
+    });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) {
+        return;
+      }
+
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.14,
+    rootMargin: "0px 0px -8% 0px"
+  });
+
+  revealTargets.forEach((section) => {
+    if (section.dataset.reveal === "hero") {
+      return;
+    }
+    observer.observe(section);
+  });
+}
+
 function renderWorks() {
   const grid = $("#works-grid");
   const template = $("#work-card-template");
@@ -303,15 +352,17 @@ function renderWorks() {
 
   if (!works.length) {
     const empty = document.createElement("div");
-    empty.className = "empty-state";
+    empty.className = "empty-state reveal-item";
     empty.textContent = "这个栏目还没有作品，去 Studio 后台上传第一件作品。";
     grid.append(empty);
     return;
   }
 
-  works.forEach((work) => {
+  works.forEach((work, index) => {
     const section = sectionById(work.category);
     const card = template.content.firstElementChild.cloneNode(true);
+    card.classList.add("reveal-item");
+    card.style.setProperty("--reveal-delay", `${Math.min(index * 90, 540)}ms`);
     card.style.setProperty("--card-accent", section?.accent || "var(--accent)");
     $('[data-field="category"]', card).textContent = section?.title || work.category;
     $('[data-field="year"]', card).textContent = work.year || "Now";
@@ -368,10 +419,11 @@ function renderMoodboard() {
   const featured = (state.content?.works || []).filter((work) => work.featured).slice(0, 6);
   const pool = featured.length ? featured : (state.content?.works || []).slice(0, 6);
 
-  pool.forEach((work) => {
+  pool.forEach((work, index) => {
     const section = sectionById(work.category);
     const tile = document.createElement("article");
-    tile.className = "mood-tile magnetic";
+    tile.className = "mood-tile magnetic reveal-item";
+    tile.style.setProperty("--reveal-delay", `${Math.min(index * 110, 660)}ms`);
     tile.style.setProperty("--tile-accent", section?.accent || "var(--accent)");
     tile.innerHTML = `<span>${section?.title || work.category}</span><strong>${work.title}</strong><span>${(work.tags || []).join(" / ")}</span>`;
     grid.append(tile);
@@ -389,9 +441,10 @@ function renderJournal() {
     return;
   }
 
-  (state.content?.journal || []).forEach((entry) => {
+  (state.content?.journal || []).forEach((entry, index) => {
     const card = document.createElement("article");
-    card.className = "journal-card";
+    card.className = "journal-card reveal-item";
+    card.style.setProperty("--reveal-delay", `${Math.min(index * 120, 480)}ms`);
     card.innerHTML = `<h3></h3><p></p>`;
     $("h3", card).textContent = entry.title;
     $("p", card).textContent = entry.body;
@@ -410,6 +463,8 @@ function renderAll() {
   renderMoodboard();
   renderJournal();
   bindMagneticElements();
+  applyRevealStagger($("#about"), ".about-card");
+  setupSectionReveals();
 }
 
 async function loadContent() {
