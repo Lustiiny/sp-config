@@ -49,12 +49,13 @@ function applyTheme(site) {
   root.style.setProperty("--accent-alt", site.theme?.accentAlt || "#ff8fd8");
   root.style.setProperty("--ink", site.theme?.ink || "#f7f4ea");
   root.style.setProperty("--paper", site.theme?.paper || "#090912");
-  document.title = site.title || "Personal Works Studio";
+  document.title = site.title || "Deming's World";
 }
 
 function renderSiteCopy(site) {
   setText('[data-site="title"]', site.title);
   setText('[data-site="owner"]', site.owner);
+  setText('[data-site="role"]', site.role);
   setText('[data-site="tagline"]', site.tagline);
   setText('[data-site="intro"]', site.intro);
 
@@ -73,12 +74,6 @@ function renderSiteCopy(site) {
     anchor.target = "_blank";
     anchor.rel = "noreferrer";
     socials.append(anchor);
-  });
-}
-
-function updateNavActiveState() {
-  $all("#site-nav .nav-chip").forEach((chip) => {
-    chip.classList.toggle("is-active", chip.dataset.section === state.activeSection);
   });
 }
 
@@ -115,7 +110,7 @@ function buildTickerFeed() {
   (state.content?.journal || []).forEach((entry) => {
     feed.push({
       kind: "note",
-      label: "札记",
+      label: "笔记",
       text: entry.title,
       at: entry.createdAt
     });
@@ -161,7 +156,7 @@ function renderTicker() {
     : [{
         kind: "info",
         label: "提示",
-        text: "暂无新内容，去 Studio 后台上传第一件作品吧",
+        text: "还没有内容，先去传一件作品吧",
         at: null
       }];
 
@@ -169,33 +164,6 @@ function renderTicker() {
   [...messages, ...messages].forEach((item) => {
     track.append(createTickerItem(item));
   });
-}
-
-function renderNavigation() {
-  const nav = $("#site-nav");
-  nav.innerHTML = "";
-
-  visibleSections().forEach((section, index) => {
-    const anchor = document.createElement("a");
-    anchor.href = "#works";
-    anchor.className = "nav-chip";
-    anchor.dataset.section = section.id;
-    anchor.style.setProperty("--chip-accent", section.accent || "var(--accent)");
-    anchor.innerHTML = `
-      <span class="nav-chip-code">${String(index + 1).padStart(2, "0")}</span>
-      <span class="nav-chip-text">${section.title}</span>
-      <span class="nav-chip-glow" aria-hidden="true"></span>
-    `;
-    anchor.addEventListener("click", () => {
-      state.activeSection = section.id;
-      renderTabs();
-      renderWorks();
-      updateNavActiveState();
-    });
-    nav.append(anchor);
-  });
-
-  updateNavActiveState();
 }
 
 function renderTabs() {
@@ -210,7 +178,6 @@ function renderTabs() {
     state.activeSection = "all";
     renderTabs();
     renderWorks();
-    updateNavActiveState();
   });
   tabs.append(allButton);
 
@@ -224,7 +191,6 @@ function renderTabs() {
       state.activeSection = section.id;
       renderTabs();
       renderWorks();
-      updateNavActiveState();
     });
     tabs.append(button);
   });
@@ -348,12 +314,13 @@ function renderWorks() {
   });
 
   grid.innerHTML = "";
-  $("#featured-count").textContent = String((state.content?.works || []).filter((work) => work.featured).length);
+  const totalWorks = (state.content?.works || []).length;
+  $("#featured-count").textContent = String(totalWorks);
 
   if (!works.length) {
     const empty = document.createElement("div");
     empty.className = "empty-state reveal-item";
-    empty.textContent = "这个栏目还没有作品，去 Studio 后台上传第一件作品。";
+    empty.textContent = "这个分类还是空的。";
     grid.append(empty);
     return;
   }
@@ -362,6 +329,9 @@ function renderWorks() {
     const section = sectionById(work.category);
     const card = template.content.firstElementChild.cloneNode(true);
     card.classList.add("reveal-item");
+    if (work.featured && state.activeSection === "all" && index === 0) {
+      card.classList.add("work-card--lead");
+    }
     card.style.setProperty("--reveal-delay", `${Math.min(index * 90, 540)}ms`);
     card.style.setProperty("--card-accent", section?.accent || "var(--accent)");
     $('[data-field="category"]', card).textContent = section?.title || work.category;
@@ -457,7 +427,6 @@ function renderAll() {
   applyTheme(site);
   renderSiteCopy(site);
   renderTicker();
-  renderNavigation();
   renderTabs();
   renderWorks();
   renderMoodboard();

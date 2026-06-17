@@ -100,6 +100,7 @@ function normalizeContent(payload) {
     site: {
       title: String(site.title || "Personal Works Studio").trim(),
       owner: String(site.owner || "").trim(),
+      role: String(site.role || "").trim(),
       tagline: String(site.tagline || "").trim(),
       intro: String(site.intro || "").trim(),
       announcement: String(site.announcement || "").trim(),
