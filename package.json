@@ -1,0 +1,25 @@
+{
+  "name": "personal-works-studio",
+  "version": "1.0.0",
+  "description": "A personal portfolio site with an editable content studio and media uploads.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lustiiny/sp-config.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lustiiny/sp-config/issues"
+  },
+  "homepage": "https://github.com/Lustiiny/sp-config#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "multer": "^2.2.0"
+  }
+}

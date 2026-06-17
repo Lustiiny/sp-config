@@ -1,0 +1,405 @@
+const state = {
+  content: null,
+  activeSection: "all",
+  pointer: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+  orb: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
+  trail: []
+};
+
+const mediaMatchers = {
+  image: /^image\//,
+  audio: /^audio\//,
+  video: /^video\//
+};
+
+const categoryIcon = {
+  music: "♪",
+  photography: "◐",
+  design: "✦",
+  ip: "◎",
+  video: "▶",
+  hobby: "※"
+};
+
+function $(selector, root = document) {
+  return root.querySelector(selector);
+}
+
+function $all(selector, root = document) {
+  return Array.from(root.querySelectorAll(selector));
+}
+
+function sectionById(id) {
+  return state.content?.site?.layout?.sections?.find((section) => section.id === id);
+}
+
+function visibleSections() {
+  return (state.content?.site?.layout?.sections || []).filter((section) => section.visible !== false);
+}
+
+function setText(selector, value) {
+  $all(selector).forEach((node) => {
+    node.textContent = value || "";
+  });
+}
+
+function applyTheme(site) {
+  const root = document.documentElement;
+  root.style.setProperty("--accent", site.theme?.accent || "#a6ffcb");
+  root.style.setProperty("--accent-alt", site.theme?.accentAlt || "#ff8fd8");
+  root.style.setProperty("--ink", site.theme?.ink || "#f7f4ea");
+  root.style.setProperty("--paper", site.theme?.paper || "#090912");
+  document.title = site.title || "Personal Works Studio";
+}
+
+function renderSiteCopy(site) {
+  setText('[data-site="title"]', site.title);
+  setText('[data-site="owner"]', site.owner);
+  setText('[data-site="tagline"]', site.tagline);
+  setText('[data-site="intro"]', site.intro);
+  setText('[data-site="announcement"]', site.announcement);
+  setText('[data-site="announcement-clone"]', site.announcement);
+
+  const contact = $("[data-contact]");
+  if (contact) {
+    contact.textContent = site.contactEmail || "Say hello";
+    contact.href = site.contactEmail ? `mailto:${site.contactEmail}` : "#about";
+  }
+
+  const socials = $("#social-links");
+  socials.innerHTML = "";
+  (site.socialLinks || []).forEach((link) => {
+    const anchor = document.createElement("a");
+    anchor.href = link.url;
+    anchor.textContent = link.label;
+    anchor.target = "_blank";
+    anchor.rel = "noreferrer";
+    socials.append(anchor);
+  });
+}
+
+function renderNavigation() {
+  const nav = $("#site-nav");
+  nav.innerHTML = "";
+
+  visibleSections().forEach((section) => {
+    const anchor = document.createElement("a");
+    anchor.href = "#works";
+    anchor.textContent = section.title;
+    anchor.addEventListener("click", () => {
+      state.activeSection = section.id;
+      renderTabs();
+      renderWorks();
+    });
+    nav.append(anchor);
+  });
+}
+
+function renderTabs() {
+  const tabs = $("#section-tabs");
+  tabs.innerHTML = "";
+
+  const allButton = document.createElement("button");
+  allButton.type = "button";
+  allButton.textContent = "全部";
+  allButton.className = state.activeSection === "all" ? "active" : "";
+  allButton.addEventListener("click", () => {
+    state.activeSection = "all";
+    renderTabs();
+    renderWorks();
+  });
+  tabs.append(allButton);
+
+  visibleSections().forEach((section) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = `${categoryIcon[section.id] || "•"} ${section.title}`;
+    button.className = state.activeSection === section.id ? "active" : "";
+    button.style.setProperty("--accent", section.accent);
+    button.addEventListener("click", () => {
+      state.activeSection = section.id;
+      renderTabs();
+      renderWorks();
+    });
+    tabs.append(button);
+  });
+}
+
+function mediaKind(file) {
+  if (!file) {
+    return "placeholder";
+  }
+
+  if (mediaMatchers.image.test(file.mimeType)) {
+    return "image";
+  }
+  if (mediaMatchers.audio.test(file.mimeType)) {
+    return "audio";
+  }
+  if (mediaMatchers.video.test(file.mimeType)) {
+    return "video";
+  }
+  return "file";
+}
+
+function renderMedia(work, target) {
+  const kind = mediaKind(work.file);
+  target.innerHTML = "";
+
+  if (kind === "image") {
+    const image = document.createElement("img");
+    image.src = work.file.url;
+    image.alt = work.title;
+    image.loading = "lazy";
+    target.append(image);
+    return;
+  }
+
+  if (kind === "audio") {
+    const wrapper = document.createElement("div");
+    wrapper.className = "media-placeholder";
+    wrapper.innerHTML = `<strong>${categoryIcon[work.category] || "♪"}</strong><span>${work.file.originalName}</span>`;
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.src = work.file.url;
+    wrapper.append(audio);
+    target.append(wrapper);
+    return;
+  }
+
+  if (kind === "video") {
+    const video = document.createElement("video");
+    video.controls = true;
+    video.playsInline = true;
+    video.src = work.file.url;
+    target.append(video);
+    return;
+  }
+
+  const placeholder = document.createElement("div");
+  placeholder.className = "media-placeholder";
+  placeholder.innerHTML = `<strong>${categoryIcon[work.category] || "✦"}</strong><span>${work.medium || "No media uploaded yet"}</span>`;
+  target.append(placeholder);
+}
+
+function renderWorks() {
+  const grid = $("#works-grid");
+  const template = $("#work-card-template");
+  const visibleIds = new Set(visibleSections().map((section) => section.id));
+  const works = (state.content?.works || []).filter((work) => {
+    if (!visibleIds.has(work.category)) {
+      return false;
+    }
+    return state.activeSection === "all" || work.category === state.activeSection;
+  });
+
+  grid.innerHTML = "";
+  $("#featured-count").textContent = String((state.content?.works || []).filter((work) => work.featured).length);
+
+  if (!works.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty-state";
+    empty.textContent = "这个栏目还没有作品，去 Studio 后台上传第一件作品。";
+    grid.append(empty);
+    return;
+  }
+
+  works.forEach((work) => {
+    const section = sectionById(work.category);
+    const card = template.content.firstElementChild.cloneNode(true);
+    card.style.setProperty("--card-accent", section?.accent || "var(--accent)");
+    $('[data-field="category"]', card).textContent = section?.title || work.category;
+    $('[data-field="year"]', card).textContent = work.year || "Now";
+    $('[data-field="title"]', card).textContent = work.title;
+    $('[data-field="description"]', card).textContent = work.description;
+
+    renderMedia(work, $(".work-media", card));
+
+    const tags = $('[data-field="tags"]', card);
+    (work.tags || []).forEach((tag) => {
+      const pill = document.createElement("span");
+      pill.textContent = tag;
+      tags.append(pill);
+    });
+
+    const actions = $(".work-actions", card);
+    if (work.externalUrl) {
+      const link = document.createElement("a");
+      link.href = work.externalUrl;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = "外部链接";
+      actions.append(link);
+    }
+    if (work.file?.downloadUrl) {
+      const download = document.createElement("a");
+      download.href = work.file.downloadUrl;
+      download.textContent = "下载";
+      actions.append(download);
+    }
+    if (!actions.children.length) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "收藏";
+      button.addEventListener("click", () => card.classList.toggle("is-saved"));
+      actions.append(button);
+    }
+
+    grid.append(card);
+  });
+}
+
+function renderMoodboard() {
+  const moodboard = $("#moodboard");
+  const grid = $("#moodboard-grid");
+  const shouldShow = state.content?.site?.layout?.showMoodboard !== false;
+  moodboard.hidden = !shouldShow;
+  grid.innerHTML = "";
+
+  if (!shouldShow) {
+    return;
+  }
+
+  const featured = (state.content?.works || []).filter((work) => work.featured).slice(0, 6);
+  const pool = featured.length ? featured : (state.content?.works || []).slice(0, 6);
+
+  pool.forEach((work) => {
+    const section = sectionById(work.category);
+    const tile = document.createElement("article");
+    tile.className = "mood-tile magnetic";
+    tile.style.setProperty("--tile-accent", section?.accent || "var(--accent)");
+    tile.innerHTML = `<span>${section?.title || work.category}</span><strong>${work.title}</strong><span>${(work.tags || []).join(" / ")}</span>`;
+    grid.append(tile);
+  });
+}
+
+function renderJournal() {
+  const journal = $("#journal");
+  const list = $("#journal-list");
+  const shouldShow = state.content?.site?.layout?.showJournal !== false;
+  journal.hidden = !shouldShow;
+  list.innerHTML = "";
+
+  if (!shouldShow) {
+    return;
+  }
+
+  (state.content?.journal || []).forEach((entry) => {
+    const card = document.createElement("article");
+    card.className = "journal-card";
+    card.innerHTML = `<h3></h3><p></p>`;
+    $("h3", card).textContent = entry.title;
+    $("p", card).textContent = entry.body;
+    list.append(card);
+  });
+}
+
+function renderAll() {
+  const { site } = state.content;
+  applyTheme(site);
+  renderSiteCopy(site);
+  renderNavigation();
+  renderTabs();
+  renderWorks();
+  renderMoodboard();
+  renderJournal();
+  bindMagneticElements();
+}
+
+async function loadContent() {
+  const response = await fetch("/api/content");
+  if (!response.ok) {
+    throw new Error("无法加载站点内容");
+  }
+  state.content = await response.json();
+  renderAll();
+}
+
+function bindMagneticElements() {
+  $all(".magnetic").forEach((element) => {
+    if (element.dataset.magneticBound) {
+      return;
+    }
+
+    element.dataset.magneticBound = "true";
+    element.addEventListener("pointermove", (event) => {
+      const rect = element.getBoundingClientRect();
+      const x = event.clientX - rect.left - rect.width / 2;
+      const y = event.clientY - rect.top - rect.height / 2;
+      element.style.transform = `translate(${x * 0.04}px, ${y * 0.08}px)`;
+      document.body.classList.add("cursor-active");
+    });
+    element.addEventListener("pointerleave", () => {
+      element.style.transform = "";
+      document.body.classList.remove("cursor-active");
+    });
+  });
+}
+
+function setupCursor() {
+  const canvas = $("#cursor-canvas");
+  const context = canvas.getContext("2d");
+  const orb = $(".cursor-orb");
+  const dot = $(".cursor-dot");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reducedMotion || !context) {
+    return;
+  }
+
+  function resize() {
+    canvas.width = window.innerWidth * window.devicePixelRatio;
+    canvas.height = window.innerHeight * window.devicePixelRatio;
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+    context.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+  }
+
+  function draw() {
+    state.orb.x += (state.pointer.x - state.orb.x) * 0.16;
+    state.orb.y += (state.pointer.y - state.orb.y) * 0.16;
+    orb.style.left = `${state.orb.x}px`;
+    orb.style.top = `${state.orb.y}px`;
+    dot.style.left = `${state.pointer.x}px`;
+    dot.style.top = `${state.pointer.y}px`;
+
+    context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    state.trail.forEach((point, index) => {
+      point.life -= 0.018;
+      const alpha = Math.max(point.life, 0);
+      const radius = 18 * alpha;
+      const gradient = context.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius);
+      gradient.addColorStop(0, `rgba(166, 255, 203, ${0.22 * alpha})`);
+      gradient.addColorStop(1, "rgba(166, 255, 203, 0)");
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.arc(point.x, point.y, radius, 0, Math.PI * 2);
+      context.fill();
+      if (point.life <= 0) {
+        state.trail.splice(index, 1);
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener("resize", resize);
+  window.addEventListener("pointermove", (event) => {
+    state.pointer.x = event.clientX;
+    state.pointer.y = event.clientY;
+    document.documentElement.style.setProperty("--cursor-x", `${event.clientX}px`);
+    document.documentElement.style.setProperty("--cursor-y", `${event.clientY}px`);
+    state.trail.push({ x: event.clientX, y: event.clientY, life: 1 });
+    if (state.trail.length > 48) {
+      state.trail.shift();
+    }
+  });
+
+  resize();
+  draw();
+}
+
+setupCursor();
+loadContent().catch((error) => {
+  $("#works-grid").innerHTML = `<div class="empty-state">${error.message}</div>`;
+});

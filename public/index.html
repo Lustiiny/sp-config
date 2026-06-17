@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="个人音乐、摄影、设计、IP 形象、视频和爱好作品分享站。">
+    <title>Lumi Archive</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="cursor-orb" aria-hidden="true"></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <canvas id="cursor-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="回到首页">
+        <span class="brand-mark">LA</span>
+        <span class="brand-copy">
+          <strong data-site="title">Lumi Archive</strong>
+          <small data-site="owner">Your Name</small>
+        </span>
+      </a>
+      <nav id="site-nav" class="site-nav" aria-label="作品栏目"></nav>
+      <a class="admin-link" href="/admin">Studio 后台</a>
+    </header>
+
+    <main id="top">
+      <section class="hero section-shell">
+        <div class="hero-copy">
+          <p class="eyebrow">Personal Works Studio</p>
+          <h1 data-site="tagline">音乐 / 摄影 / 设计 / IP 形象 / 视频实验</h1>
+          <p class="intro" data-site="intro">
+            一个像夜间工作台一样的个人作品库：收集声音、影像、角色设定、视觉设计和那些不容易被归类的爱好。
+          </p>
+          <div class="hero-actions">
+            <a class="primary-action magnetic" href="#works">浏览作品</a>
+            <a class="secondary-action magnetic" href="#about">关于我</a>
+          </div>
+        </div>
+        <div class="orbital-stage" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit orbit-three"></div>
+          <div class="signal-card">
+            <span>Now curating</span>
+            <strong id="featured-count">0</strong>
+            <small>pieces</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="ticker" aria-label="站点公告">
+        <div class="ticker-track">
+          <span data-site="announcement">后台可以随时更新页面结构、主题色、作品条目和上传文件。</span>
+          <span>Upload / Edit / Download / Remix the frame</span>
+          <span data-site="announcement-clone">后台可以随时更新页面结构、主题色、作品条目和上传文件。</span>
+        </div>
+      </section>
+
+      <section id="works" class="section-shell">
+        <div class="section-heading">
+          <p class="eyebrow">Archive Index</p>
+          <h2>作品与兴趣</h2>
+          <p>栏目顺序、名称和可见性都由后台控制。选择一个频道查看对应作品。</p>
+        </div>
+        <div id="section-tabs" class="section-tabs" role="tablist" aria-label="作品分类"></div>
+        <div id="works-grid" class="works-grid" aria-live="polite"></div>
+      </section>
+
+      <section id="moodboard" class="moodboard section-shell">
+        <div class="section-heading">
+          <p class="eyebrow">Moodboard</p>
+          <h2>灵感拼贴</h2>
+          <p>从不同作品类型抽取材质、颜色和关键词，形成一个会随内容更新的视觉面板。</p>
+        </div>
+        <div id="moodboard-grid" class="moodboard-grid"></div>
+      </section>
+
+      <section id="journal" class="journal section-shell">
+        <div class="section-heading">
+          <p class="eyebrow">Notes</p>
+          <h2>过程记录</h2>
+          <p>可以在后台高级 JSON 里维护灵感札记、公告或自定义页面内容。</p>
+        </div>
+        <div id="journal-list" class="journal-list"></div>
+      </section>
+
+      <section id="about" class="about section-shell">
+        <div>
+          <p class="eyebrow">About</p>
+          <h2 data-site="title">Lumi Archive</h2>
+        </div>
+        <div class="about-card">
+          <p data-site="intro">
+            一个像夜间工作台一样的个人作品库：收集声音、影像、角色设定、视觉设计和那些不容易被归类的爱好。
+          </p>
+          <div id="social-links" class="social-links"></div>
+          <a class="contact-link magnetic" href="mailto:hello@example.com" data-contact>hello@example.com</a>
+        </div>
+      </section>
+    </main>
+
+    <template id="work-card-template">
+      <article class="work-card magnetic">
+        <div class="work-media"></div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span data-field="category"></span>
+            <span data-field="year"></span>
+          </div>
+          <h3 data-field="title"></h3>
+          <p data-field="description"></p>
+          <div class="tag-row" data-field="tags"></div>
+          <div class="work-actions"></div>
+        </div>
+      </article>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

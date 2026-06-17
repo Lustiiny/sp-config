@@ -1,0 +1,144 @@
+{
+  "site": {
+    "title": "Lumi Archive",
+    "owner": "Your Name",
+    "tagline": "音乐 / 摄影 / 设计 / IP 形象 / 视频实验",
+    "intro": "一个像夜间工作台一样的个人作品库：收集声音、影像、角色设定、视觉设计和那些不容易被归类的爱好。",
+    "announcement": "后台可以随时更新页面结构、主题色、作品条目和上传文件。",
+    "contactEmail": "hello@example.com",
+    "socialLinks": [
+      {
+        "label": "Instagram",
+        "url": "https://example.com"
+      },
+      {
+        "label": "Bandcamp",
+        "url": "https://example.com"
+      },
+      {
+        "label": "Bilibili",
+        "url": "https://example.com"
+      }
+    ],
+    "theme": {
+      "accent": "#a6ffcb",
+      "accentAlt": "#ff8fd8",
+      "ink": "#f7f4ea",
+      "paper": "#090912",
+      "cursorMode": "comet"
+    },
+    "layout": {
+      "heroMode": "orbital",
+      "showMoodboard": true,
+      "showJournal": true,
+      "sections": [
+        {
+          "id": "music",
+          "title": "音乐",
+          "description": "Demo、现场片段、专辑概念和声音草图。",
+          "accent": "#a6ffcb",
+          "visible": true
+        },
+        {
+          "id": "photography",
+          "title": "摄影",
+          "description": "街头、人物、旅行和日常观察。",
+          "accent": "#80d8ff",
+          "visible": true
+        },
+        {
+          "id": "design",
+          "title": "设计",
+          "description": "平面、海报、品牌、界面和字体实验。",
+          "accent": "#ffd166",
+          "visible": true
+        },
+        {
+          "id": "ip",
+          "title": "IP 形象与延伸",
+          "description": "角色设定、周边想法、世界观碎片。",
+          "accent": "#ff8fd8",
+          "visible": true
+        },
+        {
+          "id": "video",
+          "title": "视频",
+          "description": "短片、MV、动态视觉和幕后记录。",
+          "accent": "#c4a7ff",
+          "visible": true
+        },
+        {
+          "id": "hobby",
+          "title": "个人爱好",
+          "description": "书、器材、收藏、灵感来源和生活切片。",
+          "accent": "#ff9f68",
+          "visible": true
+        }
+      ]
+    }
+  },
+  "works": [
+    {
+      "id": "work-music-001",
+      "category": "music",
+      "title": "Midnight Loop",
+      "description": "一段围绕合成器 arpeggio 展开的夜行 Demo，用来测试声音展示卡片。",
+      "year": "2026",
+      "medium": "Audio demo",
+      "tags": [
+        "synth",
+        "demo",
+        "night"
+      ],
+      "externalUrl": "https://example.com",
+      "file": null,
+      "featured": true,
+      "createdAt": "2026-06-17T00:00:00.000Z",
+      "updatedAt": "2026-06-17T00:00:00.000Z"
+    },
+    {
+      "id": "work-photo-001",
+      "category": "photography",
+      "title": "Neon Rain Contact Sheet",
+      "description": "雨夜、玻璃反光和行人的剪影，作为摄影栏目示例。",
+      "year": "2026",
+      "medium": "Digital photography",
+      "tags": [
+        "street",
+        "rain",
+        "color"
+      ],
+      "externalUrl": "",
+      "file": null,
+      "featured": true,
+      "createdAt": "2026-06-17T00:00:00.000Z",
+      "updatedAt": "2026-06-17T00:00:00.000Z"
+    },
+    {
+      "id": "work-ip-001",
+      "category": "ip",
+      "title": "Orbit Cat 角色设定",
+      "description": "一个收集城市噪音的太空猫 IP，可延伸为贴纸、钥匙扣和短动画。",
+      "year": "2026",
+      "medium": "Character design",
+      "tags": [
+        "character",
+        "merch",
+        "story"
+      ],
+      "externalUrl": "",
+      "file": null,
+      "featured": false,
+      "createdAt": "2026-06-17T00:00:00.000Z",
+      "updatedAt": "2026-06-17T00:00:00.000Z"
+    }
+  ],
+  "journal": [
+    {
+      "id": "note-001",
+      "title": "为什么要做这个站",
+      "body": "作品不只是最终成片，也包括草图、片段、过程和偏爱的材料。这个站点把它们放在同一个可编辑的框架里。",
+      "createdAt": "2026-06-17T00:00:00.000Z"
+    }
+  ]
+}
