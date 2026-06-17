@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="德明的个人作品集：音乐、摄影、设计、IP、视频与日常碎片。">
+    <title>Deming's World</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="cursor-orb" aria-hidden="true"></div>
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <canvas id="cursor-canvas" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="回到首页">
+        <strong class="brand-name" data-site="owner">德明</strong>
+      </a>
+      <nav class="header-nav" aria-label="页面导航">
+        <a href="#works">作品</a>
+        <a href="#moodboard">碎片</a>
+        <a href="#journal">记事</a>
+        <a href="#about">关于</a>
+      </nav>
+      <a class="admin-link" href="/admin">管理</a>
+    </header>
+
+    <main id="top">
+      <section class="hero hero-stage" data-reveal="hero">
+        <div class="hero-backdrop" aria-hidden="true">
+          <span class="hero-aurora hero-aurora--one"></span>
+          <span class="hero-aurora hero-aurora--two"></span>
+        </div>
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <p class="hero-role" data-site="role">视觉 / 声音 / 上海</p>
+            <h1 data-site="tagline">Deming's World</h1>
+            <p class="intro hero-intro" data-site="intro">
+              平时做点设计，偶尔录声音，周末带着相机出门。这里是我懒得发在社交平台上、但又想留住的东西。
+            </p>
+            <div class="hero-actions">
+              <a class="primary-action magnetic" href="#works">看作品</a>
+              <a class="secondary-action magnetic" href="#about">联系我</a>
+            </div>
+          </div>
+          <div class="hero-aside">
+            <div class="hero-stat magnetic">
+              <span>已收录</span>
+              <strong id="featured-count">0</strong>
+              <small>件作品</small>
+            </div>
+            <div class="orbital-stage hero-visual" aria-hidden="true">
+              <div class="orbit orbit-one"></div>
+              <div class="orbit orbit-two"></div>
+              <div class="orbit orbit-three"></div>
+              <div class="hero-core"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ticker" aria-label="最近更新" data-reveal="scan">
+        <div id="ticker-track" class="ticker-track"></div>
+      </section>
+
+      <section id="works" class="section-shell module-works" data-reveal="rise">
+        <div class="section-heading section-heading--compact">
+          <div>
+            <p class="eyebrow">作品</p>
+            <h2>这几年留下的东西</h2>
+          </div>
+          <p class="section-note">没什么固定顺序，翻到哪儿算哪儿。</p>
+        </div>
+        <div id="section-tabs" class="section-tabs" role="tablist" aria-label="作品分类"></div>
+        <div id="works-grid" class="works-grid" aria-live="polite"></div>
+      </section>
+
+      <section id="moodboard" class="moodboard section-shell module-moodboard" data-reveal="drift-left">
+        <div class="section-heading section-heading--compact">
+          <div>
+            <p class="eyebrow">碎片</p>
+            <h2>最近在意的</h2>
+          </div>
+          <p class="section-note">颜色、关键词，还有没整理完的念头。</p>
+        </div>
+        <div id="moodboard-grid" class="moodboard-grid"></div>
+      </section>
+
+      <section id="journal" class="journal section-shell module-journal" data-reveal="drift-right">
+        <div class="section-heading section-heading--compact">
+          <div>
+            <p class="eyebrow">记事</p>
+            <h2>随手写两句</h2>
+          </div>
+        </div>
+        <div id="journal-list" class="journal-list"></div>
+      </section>
+
+      <section id="about" class="about section-shell module-about" data-reveal="scale-in">
+        <div class="about-intro">
+          <p class="eyebrow">关于</p>
+          <h2 data-site="owner">德明</h2>
+          <p class="about-lead" data-site="intro">
+            平时做点设计，偶尔录声音，周末带着相机出门。这里是我懒得发在社交平台上、但又想留住的东西。
+          </p>
+        </div>
+        <div class="about-card">
+          <p class="about-detail">如果你对这些作品感兴趣，或者想聊聊合作，发邮件就行。回复不一定快，但会看。</p>
+          <div id="social-links" class="social-links"></div>
+          <a class="contact-link magnetic" href="mailto:deming@mailbox.studio" data-contact>deming@mailbox.studio</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span data-site="title">Deming's World</span>
+      <span>© 2026</span>
+    </footer>
+
+    <template id="work-card-template">
+      <article class="work-card magnetic">
+        <div class="work-media"></div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span data-field="category"></span>
+            <span data-field="year"></span>
+          </div>
+          <h3 data-field="title"></h3>
+          <p data-field="description"></p>
+          <div class="tag-row" data-field="tags"></div>
+          <div class="work-actions"></div>
+        </div>
+      </article>
+    </template>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

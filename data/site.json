@@ -1,0 +1,205 @@
+{
+  "site": {
+    "title": "Deming's World",
+    "owner": "德明",
+    "role": "视觉 / 声音 / 上海",
+    "tagline": "Deming's World",
+    "intro": "平时做点设计，偶尔录声音，周末带着相机出门。这里是我懒得发在社交平台上、但又想留住的东西。",
+    "announcement": "六月新传了两段 demo，还有一组台北夜景。",
+    "contactEmail": "deming@mailbox.studio",
+    "socialLinks": [
+      {
+        "label": "小红书",
+        "url": "https://example.com"
+      },
+      {
+        "label": "网易云",
+        "url": "https://example.com"
+      },
+      {
+        "label": "Behance",
+        "url": "https://example.com"
+      }
+    ],
+    "theme": {
+      "accent": "#a6ffcb",
+      "accentAlt": "#ff8fd8",
+      "ink": "#f7f4ea",
+      "paper": "#090912",
+      "cursorMode": "comet"
+    },
+    "layout": {
+      "heroMode": "orbital",
+      "showMoodboard": true,
+      "showJournal": true,
+      "sections": [
+        {
+          "id": "music",
+          "title": "音乐",
+          "description": "demo、翻唱片段、没发出去的曲子",
+          "accent": "#a6ffcb",
+          "visible": true
+        },
+        {
+          "id": "photography",
+          "title": "摄影",
+          "description": "街拍、旅行、朋友",
+          "accent": "#80d8ff",
+          "visible": true
+        },
+        {
+          "id": "design",
+          "title": "设计",
+          "description": "海报、包装、界面草稿",
+          "accent": "#ffd166",
+          "visible": true
+        },
+        {
+          "id": "ip",
+          "title": "IP",
+          "description": "角色、贴纸、周边想法",
+          "accent": "#ff8fd8",
+          "visible": true
+        },
+        {
+          "id": "video",
+          "title": "视频",
+          "description": "短片、花絮、屏幕录像",
+          "accent": "#c4a7ff",
+          "visible": true
+        },
+        {
+          "id": "hobby",
+          "title": "杂项",
+          "description": "书、器材、收藏",
+          "accent": "#ff9f68",
+          "visible": true
+        }
+      ]
+    }
+  },
+  "works": [
+    {
+      "id": "work-music-001",
+      "category": "music",
+      "title": "末班车",
+      "description": "去年冬天在出租车上录的环境音，回家后又叠了两轨合成器。没打算发，但听久了还挺顺眼。",
+      "year": "2025",
+      "medium": "lo-fi demo",
+      "tags": [
+        "合成器",
+        "环境音",
+        "深夜"
+      ],
+      "externalUrl": "",
+      "file": null,
+      "featured": true,
+      "createdAt": "2026-06-15T10:00:00.000Z",
+      "updatedAt": "2026-06-15T10:00:00.000Z"
+    },
+    {
+      "id": "work-photo-001",
+      "category": "photography",
+      "title": "重庆南路",
+      "description": "台北出差的第三个晚上，书店关门前十分钟。路灯把雨丝照得很清楚。",
+      "year": "2026",
+      "medium": "胶片扫描",
+      "tags": [
+        "台北",
+        "夜景",
+        "街道"
+      ],
+      "externalUrl": "",
+      "file": null,
+      "featured": true,
+      "createdAt": "2026-06-14T08:00:00.000Z",
+      "updatedAt": "2026-06-14T08:00:00.000Z"
+    },
+    {
+      "id": "work-design-001",
+      "category": "design",
+      "title": "演出海报三连",
+      "description": "帮朋友乐队做的三场演出视觉。第三版才定稿，前两版被说「太安静了」。",
+      "year": "2026",
+      "medium": "海报",
+      "tags": [
+        "演出",
+        "排版",
+        "朋克"
+      ],
+      "externalUrl": "",
+      "file": null,
+      "featured": false,
+      "createdAt": "2026-06-10T12:00:00.000Z",
+      "updatedAt": "2026-06-10T12:00:00.000Z"
+    },
+    {
+      "id": "work-ip-001",
+      "category": "ip",
+      "title": "小球同学",
+      "description": "一只耳朵比另一只大的太空猫。本来只是贴纸草图，后来朋友老问能不能做成钥匙扣。",
+      "year": "2025",
+      "medium": "角色设定",
+      "tags": [
+        "角色",
+        "贴纸",
+        "周边"
+      ],
+      "externalUrl": "",
+      "file": null,
+      "featured": true,
+      "createdAt": "2026-05-28T16:00:00.000Z",
+      "updatedAt": "2026-06-12T09:00:00.000Z"
+    },
+    {
+      "id": "work-video-001",
+      "category": "video",
+      "title": "有点吵的房间",
+      "description": "租来的工作室搬空前一天拍的。风扇、旧显示器、窗外高架的车流，全在一起。",
+      "year": "2025",
+      "medium": "短片",
+      "tags": [
+        "纪实",
+        "室内",
+        "声音"
+      ],
+      "externalUrl": "",
+      "file": null,
+      "featured": false,
+      "createdAt": "2026-05-20T18:00:00.000Z",
+      "updatedAt": "2026-05-20T18:00:00.000Z"
+    },
+    {
+      "id": "work-hobby-001",
+      "category": "hobby",
+      "title": "二手市场的 Contax T2",
+      "description": "花了一个下午在闲鱼砍价。快门声还是好听，就是电池仓盖有点松。",
+      "year": "2024",
+      "medium": "收藏",
+      "tags": [
+        "相机",
+        "胶片",
+        "旧物"
+      ],
+      "externalUrl": "",
+      "file": null,
+      "featured": false,
+      "createdAt": "2026-04-08T11:00:00.000Z",
+      "updatedAt": "2026-04-08T11:00:00.000Z"
+    }
+  ],
+  "journal": [
+    {
+      "id": "note-001",
+      "title": "六月在整理硬盘",
+      "body": "翻出来很多 2023 年的照片，画质一般，但那天的心情记得很清楚。打算挑几张修一下再放上来。",
+      "createdAt": "2026-06-16T14:00:00.000Z"
+    },
+    {
+      "id": "note-002",
+      "title": "小球同学第三版",
+      "body": "把耳朵改小了，朋友却说没第一版可爱。可能还是会回到最初那稿。",
+      "createdAt": "2026-06-12T09:30:00.000Z"
+    }
+  ]
+}

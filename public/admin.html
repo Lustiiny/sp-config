@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="个人作品站内容管理后台。">
+    <title>Studio Admin</title>
+    <link rel="stylesheet" href="/admin.css">
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="studio-brand" href="/">
+        <span>LA</span>
+        <strong>Studio Admin</strong>
+      </a>
+      <nav>
+        <a href="#login">登录</a>
+        <a href="#site">站点框架</a>
+        <a href="#sections">栏目结构</a>
+        <a href="#works">作品管理</a>
+        <a href="#advanced">高级 JSON</a>
+      </nav>
+      <p class="hint">默认口令是 <code>studio-admin</code>。上线时请设置环境变量 <code>ADMIN_TOKEN</code>。</p>
+    </aside>
+
+    <main>
+      <section id="login" class="panel auth-panel">
+        <div>
+          <p class="eyebrow">Access</p>
+          <h1>独立后台</h1>
+          <p>输入管理口令后，可以编辑页面内容、上传作品文件、调整栏目框架和主题色。</p>
+        </div>
+        <form id="token-form" class="inline-form">
+          <label>
+            管理口令
+            <input id="token-input" name="token" type="password" autocomplete="current-password" placeholder="studio-admin">
+          </label>
+          <button type="submit">保存口令</button>
+        </form>
+      </section>
+
+      <div id="status" class="status" role="status" aria-live="polite"></div>
+
+      <section id="site" class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Frame</p>
+            <h2>站点框架与主题</h2>
+          </div>
+          <button id="reload-content" type="button">重新加载</button>
+        </div>
+        <form id="site-form" class="form-grid">
+          <label>
+            站点标题
+            <input name="title" required>
+          </label>
+          <label>
+            作者 / 显示名
+            <input name="owner">
+          </label>
+          <label class="wide">
+            首页大标题
+            <input name="tagline">
+          </label>
+          <label class="wide">
+            介绍文案
+            <textarea name="intro" rows="4"></textarea>
+          </label>
+          <label class="wide">
+            滚动公告
+            <input name="announcement">
+          </label>
+          <label>
+            联系邮箱
+            <input name="contactEmail" type="email">
+          </label>
+          <label>
+            主色
+            <input name="accent" type="color">
+          </label>
+          <label>
+            辅助色
+            <input name="accentAlt" type="color">
+          </label>
+          <label>
+            文字色
+            <input name="ink" type="color">
+          </label>
+          <label>
+            背景色
+            <input name="paper" type="color">
+          </label>
+          <label>
+            首页模式
+            <select name="heroMode">
+              <option value="orbital">Orbital / 轨道</option>
+              <option value="archive">Archive / 档案</option>
+              <option value="minimal">Minimal / 极简</option>
+            </select>
+          </label>
+          <label>
+            光标模式
+            <select name="cursorMode">
+              <option value="comet">Comet / 彗星</option>
+              <option value="halo">Halo / 光环</option>
+              <option value="quiet">Quiet / 安静</option>
+            </select>
+          </label>
+          <label class="checkbox">
+            <input name="showMoodboard" type="checkbox">
+            显示灵感拼贴
+          </label>
+          <label class="checkbox">
+            <input name="showJournal" type="checkbox">
+            显示过程记录
+          </label>
+          <label class="wide">
+            社交链接（每行：名称 | URL）
+            <textarea name="socialLinks" rows="4"></textarea>
+          </label>
+          <div class="form-actions wide">
+            <button type="submit">保存站点框架</button>
+            <a href="/" target="_blank" rel="noreferrer">打开前台预览</a>
+          </div>
+        </form>
+      </section>
+
+      <section id="sections" class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Structure</p>
+            <h2>栏目结构</h2>
+          </div>
+          <button id="add-section" type="button">新增栏目</button>
+        </div>
+        <div id="sections-editor" class="sections-editor"></div>
+        <div class="form-actions">
+          <button id="save-sections" type="button">保存栏目结构</button>
+        </div>
+      </section>
+
+      <section id="works" class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Works</p>
+            <h2>上传 / 编辑 / 下载</h2>
+          </div>
+          <button id="reset-work-form" type="button">新建作品</button>
+        </div>
+        <form id="work-form" class="form-grid" enctype="multipart/form-data">
+          <input name="id" type="hidden">
+          <label>
+            分类
+            <select name="category"></select>
+          </label>
+          <label>
+            年份
+            <input name="year" placeholder="2026">
+          </label>
+          <label class="wide">
+            标题
+            <input name="title" required>
+          </label>
+          <label class="wide">
+            描述
+            <textarea name="description" rows="4"></textarea>
+          </label>
+          <label>
+            媒介
+            <input name="medium" placeholder="Audio / Photo / Video">
+          </label>
+          <label>
+            标签（逗号分隔）
+            <input name="tags" placeholder="demo, street, character">
+          </label>
+          <label class="wide">
+            外部链接
+            <input name="externalUrl" type="url" placeholder="https://">
+          </label>
+          <label class="wide">
+            上传文件
+            <input name="file" type="file" accept="image/*,audio/*,video/*,.pdf,.zip">
+          </label>
+          <label class="checkbox">
+            <input name="featured" type="checkbox">
+            标记为精选
+          </label>
+          <label class="checkbox">
+            <input name="removeFile" type="checkbox">
+            保存时移除已有文件
+          </label>
+          <div class="form-actions wide">
+            <button type="submit">保存作品</button>
+          </div>
+        </form>
+        <div id="works-table" class="works-table"></div>
+      </section>
+
+      <section id="advanced" class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Advanced</p>
+            <h2>完整内容 JSON</h2>
+          </div>
+          <button id="format-json" type="button">格式化</button>
+        </div>
+        <p class="panel-copy">这里可以编辑 journal、socialLinks 或未来扩展字段。保存时后端会做基础规范化并生成备份。</p>
+        <textarea id="json-editor" class="json-editor" spellcheck="false"></textarea>
+        <div class="form-actions">
+          <button id="save-json" type="button">保存完整 JSON</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="/admin.js" defer></script>
+  </body>
+</html>
