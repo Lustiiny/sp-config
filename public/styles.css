@@ -527,15 +527,48 @@ h3 {
 .ticker-track {
   display: flex;
   width: max-content;
-  gap: 3rem;
+  gap: 2.5rem;
   padding: 0.9rem 0;
   color: var(--muted);
   white-space: nowrap;
-  animation: marquee 24s linear infinite;
+  animation: marquee 34s linear infinite;
 }
 
-.ticker-track span {
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   padding-inline: 1rem;
+}
+
+.ticker-label {
+  padding: 0.22rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 34%, transparent);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.ticker-item--update .ticker-label {
+  border-color: color-mix(in srgb, var(--accent-alt) 34%, transparent);
+  color: var(--accent-alt);
+}
+
+.ticker-item--note .ticker-label {
+  border-color: rgba(255, 255, 255, 0.18);
+  color: var(--ink);
+}
+
+.ticker-item--info .ticker-label {
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--muted);
+}
+
+.ticker-copy {
+  color: color-mix(in srgb, var(--ink) 72%, var(--muted));
 }
 
 .section-heading {

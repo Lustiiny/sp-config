@@ -57,8 +57,6 @@ function renderSiteCopy(site) {
   setText('[data-site="owner"]', site.owner);
   setText('[data-site="tagline"]', site.tagline);
   setText('[data-site="intro"]', site.intro);
-  setText('[data-site="announcement"]', site.announcement);
-  setText('[data-site="announcement-clone"]', site.announcement);
 
   const contact = $("[data-contact]");
   if (contact) {
@@ -81,6 +79,95 @@ function renderSiteCopy(site) {
 function updateNavActiveState() {
   $all("#site-nav .nav-chip").forEach((chip) => {
     chip.classList.toggle("is-active", chip.dataset.section === state.activeSection);
+  });
+}
+
+function formatTickerDate(iso) {
+  if (!iso) {
+    return "";
+  }
+
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function buildTickerFeed() {
+  const feed = [];
+
+  (state.content?.works || []).forEach((work) => {
+    const section = sectionById(work.category);
+    const createdAt = work.createdAt || work.updatedAt;
+    const updatedAt = work.updatedAt || work.createdAt;
+    const isFresh = createdAt && updatedAt && Math.abs(new Date(updatedAt) - new Date(createdAt)) < 60_000;
+
+    feed.push({
+      kind: isFresh ? "new" : "update",
+      label: isFresh ? "新增" : "更新",
+      text: `${section?.title || work.category} · ${work.title}${work.year ? ` · ${work.year}` : ""}`,
+      at: updatedAt || createdAt
+    });
+  });
+
+  (state.content?.journal || []).forEach((entry) => {
+    feed.push({
+      kind: "note",
+      label: "札记",
+      text: entry.title,
+      at: entry.createdAt
+    });
+  });
+
+  feed.sort((left, right) => new Date(right.at || 0) - new Date(left.at || 0));
+
+  const announcement = state.content?.site?.announcement?.trim();
+  if (announcement) {
+    feed.push({
+      kind: "info",
+      label: "公告",
+      text: announcement,
+      at: null
+    });
+  }
+
+  return feed.slice(0, 14);
+}
+
+function createTickerItem(item) {
+  const node = document.createElement("span");
+  node.className = `ticker-item ticker-item--${item.kind}`;
+
+  const label = document.createElement("strong");
+  label.className = "ticker-label";
+  label.textContent = item.label;
+
+  const copy = document.createElement("span");
+  copy.className = "ticker-copy";
+  const date = formatTickerDate(item.at);
+  copy.textContent = date ? `${date} · ${item.text}` : item.text;
+
+  node.append(label, copy);
+  return node;
+}
+
+function renderTicker() {
+  const track = $("#ticker-track");
+  const feed = buildTickerFeed();
+  const messages = feed.length
+    ? feed
+    : [{
+        kind: "info",
+        label: "提示",
+        text: "暂无新内容，去 Studio 后台上传第一件作品吧",
+        at: null
+      }];
+
+  track.innerHTML = "";
+  [...messages, ...messages].forEach((item) => {
+    track.append(createTickerItem(item));
   });
 }
 
@@ -316,6 +403,7 @@ function renderAll() {
   const { site } = state.content;
   applyTheme(site);
   renderSiteCopy(site);
+  renderTicker();
   renderNavigation();
   renderTabs();
   renderWorks();
